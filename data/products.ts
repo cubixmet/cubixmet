@@ -50,7 +50,7 @@ export const products: ProductListing[] = [
     category: "Learning Platform",
     description:
       "A learning and skills platform from the Cubixmet product ecosystem.",
-    href: null,
+    href: 'https://cubixskill-public-website.vercel.app/',
   },
   {
     name: "CubixLog",
