@@ -84,12 +84,30 @@ export const staff: StaffMember[] = [
     description: "Expert full-stack developer building robust, innovative applications effortlessly.",
     isLeader: false,
   },
+  {
+  id: "riswan-mk",
+  initials: "RM",
+  photoUrl: "",
+  name: "Riswan MK",
+  role: "Graphical Designer",
+  description: "Creative designer specializing in visual branding, graphics, and digital design.",
+  isLeader: false,
+},
+{
+  id: "midlaj",
+  initials: "MI",
+  photoUrl: "",
+  name: "Midlaj",
+  role: "Video Editor",
+  description: "Creative video editor producing engaging visual content, promotional videos, and digital media.",
+  isLeader: false,
+},
 ];
 
 // The order shown on each venture page; each ID resolves to one staff record.
 export const ventureTeamIds: Record<VentureTeamId, readonly string[]> = {
   tech: ["fadhil", "ijas", "amnas-ali", "muhammed-salman"],
-  digital: ["fadhil", "shahid"],
+  digital: ["fadhil", "shahid", "riswan-mk","midlaj",],
   academy: ["fadhil", "ijas", "vafa"],
 };
 
