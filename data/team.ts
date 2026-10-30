@@ -4,6 +4,12 @@
  * ventures without duplicating profiles or job titles across files.
  *
  * Editing a person's name, role, or image here updates every team section.
+ *
+ * Team photo setup:
+ * 1. Upload a WebP/JPG/PNG file to public/images/team/ in this repository.
+ * 2. Set the staff member's photoUrl to "/images/team/filename.webp".
+ * 3. Leave photoUrl empty to display initials instead.
+ *    Example: photoUrl: "/images/team/fadhil.webp"
  */
 export type VentureTeamId = "tech" | "digital" | "academy";
 
@@ -24,6 +30,7 @@ export const staff: StaffMember[] = [
     id: "fadhil",
     profileHref: "/ventures/tech#team",
     initials: "FA",
+    photoUrl: "", // Set to "/images/team/<filename>.webp" after uploading the photo.
     name: "Fadhil",
     role: "Founder & Chief Executive Officer (CEO)",
     description: "Visionary leader driving company growth and strategic IT initiatives excellently.",
@@ -33,6 +40,7 @@ export const staff: StaffMember[] = [
     id: "shahid",
     profileHref: "/ventures/digital#team",
     initials: "SH",
+    photoUrl: "", // Set to "/images/team/<filename>.webp" after uploading the photo.
     name: "Shahid",
     role: "Founder & Managing Director",
     description: "Strategic powerhouse strengthening long-term growth and business development masterfully.",
@@ -42,6 +50,7 @@ export const staff: StaffMember[] = [
     id: "ijas",
     profileHref: "/ventures/academy#team",
     initials: "IJ",
+    photoUrl: "", // Set to "/images/team/<filename>.webp" after uploading the photo.
     name: "Ijas",
     role: "Founder & Chief Operating Officer (COO)",
     description: "Exceptional operational strategist executing company plans with flawless precision.",
@@ -50,6 +59,7 @@ export const staff: StaffMember[] = [
   {
     id: "vafa",
     initials: "VA",
+    photoUrl: "", // Set to "/images/team/<filename>.webp" after uploading the photo.
     name: "Vafa",
     role: "Founder & Chief Product Officer (CPO)",
     description: "Mastermind of impactful product strategy and academy development operations.",
@@ -59,6 +69,7 @@ export const staff: StaffMember[] = [
   {
     id: "amnas-ali",
     initials: "AA",
+    photoUrl: "", // Set to "/images/team/<filename>.webp" after uploading the photo.
     name: "Amnas Ali",
     role: "Developer",
     description: "Highly skilled developer engineering high-performance, flawless technical solutions.",
@@ -67,6 +78,7 @@ export const staff: StaffMember[] = [
   {
     id: "muhammed-salman",
     initials: "MS",
+    photoUrl: "", // Set to "/images/team/<filename>.webp" after uploading the photo.
     name: "Muhammed Salman",
     role: "Developer",
     description: "Expert full-stack developer building robust, innovative applications effortlessly.",
@@ -83,6 +95,7 @@ export const ventureTeamIds: Record<VentureTeamId, readonly string[]> = {
 
 export type Leader = {
   initials: string;
+  photoUrl?: string;
   name: string;
   role: string;
   copy: string;
@@ -90,14 +103,16 @@ export type Leader = {
 };
 export type TeamMember = {
   initials: string;
+  photoUrl?: string;
   name: string;
   role: string;
 };
 
 export const leaders: Leader[] = staff
   .filter((person) => person.isLeader)
-  .map(({ initials, name, role, description, profileHref }) => ({
+  .map(({ initials, name, role, description, profileHref, photoUrl }) => ({
     initials,
+    photoUrl,
     name,
     role,
     copy: description,
@@ -106,7 +121,7 @@ export const leaders: Leader[] = staff
 
 export const teamMembers: TeamMember[] = staff
   .filter((person) => !person.isLeader)
-  .map(({ initials, name, role }) => ({ initials, name, role }));
+  .map(({ initials, name, role, photoUrl }) => ({ initials, name, role, photoUrl }));
 
 export type VentureTeamMember = StaffMember & { description: string };
 

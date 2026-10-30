@@ -886,3 +886,37 @@ a {
     transition: none;
   }
 }
+
+/* Seamless single-line scrolling for the capabilities ribbon. */
+.capabilities-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.capabilities-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: capabilities-marquee-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+.capabilities-marquee:hover .capabilities-marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes capabilities-marquee-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capabilities-marquee {
+    overflow-x: auto;
+  }
+
+  .capabilities-marquee__track {
+    animation: none;
+    will-change: auto;
+  }
+}

@@ -17,18 +17,18 @@ export const productTools = [
   },
   {
     id: "tool",
-    category: "Tool",
+    category: "Tools",
     number: "02",
-    name: "Automation Tools",
+    name: "Online Tools & Utilities",
     description:
-      "Explore focused tools that simplify repetitive tasks and everyday digital workflows.",
-    detailHeading: "Smarter tools. Less manual work.",
+      "Explore QR and barcode generation, tickets, certificates, image slicing, contact exports, nutrition plans and more.",
+    detailHeading: "Useful tools. Everyday impact.",
     detailDescription:
-      "Cubixmet builds focused utilities and integrations that help teams connect processes, automate routine steps and work more efficiently.",
-    features: ["Workflow automation", "API integrations", "Practical AI assistance"],
+      "Find practical online tools for business, creative work and productivity — including six available utilities and an upcoming PDF converter.",
+    features: ["QR codes & barcodes", "Tickets & certificates", "Creative & productivity tools"],
     href: "/tools",
-    action: "Explore Tool",
-    contactMessage: "Hi Cubixmet, I'd like to discuss a workflow or automation tool.",
+    action: "Explore All Tools",
+    contactMessage: "Hi Cubixmet, I'd like to discuss an online tool.",
   },
 ] as const;
 

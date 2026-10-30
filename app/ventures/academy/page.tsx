@@ -234,7 +234,7 @@ export default function CubixmetAcademyPage() {
                   <p className="mt-1.5 text-[10px] font-medium uppercase leading-[1.65] tracking-[.09em] text-white/45 md:text-[11px]">{member.role}</p>
                   <p className="mt-5 max-w-[620px] text-[12px] leading-[1.75] text-white/50 md:mt-6 md:text-[14px] md:leading-6">{member.description}</p>
                 </div>
-                <div className="justify-self-end"><TechTeamPortrait name={member.name} initials={member.initials} /></div>
+                <div className="justify-self-end"><TechTeamPortrait name={member.name} initials={member.initials} photoUrl={member.photoUrl} /></div>
               </article>
             ))}
           </div>

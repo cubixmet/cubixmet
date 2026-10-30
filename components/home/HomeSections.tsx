@@ -8,6 +8,9 @@ import { services } from "../../data/services";
 import { aboutContent, aboutPillars } from "../../data/about";
 import { ventures } from "../../data/ventures";
 import { projects, projectFilters } from "../../data/projects";
+import { products } from "../../data/products";
+import { freeTools } from "../../data/freeTools";
+import PortfolioDirectoryCard from "./PortfolioDirectoryCard";
 import TestimonialsSlider from "./TestimonialsSlider";
 import { homeCopy } from "../../data/homeContent";
 import { site, whatsappLink } from "../../data/site";
@@ -775,9 +778,9 @@ function ProcessSection() {
   );
 }
 
-function WorkSection() {
+function WorkSection({ availableVideoPaths }: { availableVideoPaths: string[] }) {
   const [portfolioFilter, setPortfolioFilter] = useState<
-    "All" | "Dynamic Website" | "Digital Marketing"
+    "All" | "Dynamic Website" | "Digital Marketing" | "Products" | "Tools"
   >("All");
   const portfolioGridRef = useRef<HTMLDivElement>(null);
 
@@ -789,11 +792,15 @@ function WorkSection() {
     );
   }, [portfolioFilter]);
 
-  const filters = projectFilters;
+  const filters = [...projectFilters, "Products", "Tools"] as const;
   const filteredProjects =
     portfolioFilter === "All"
       ? projects
-      : projects.filter((project) => project.category === portfolioFilter);
+      : portfolioFilter === "Dynamic Website" || portfolioFilter === "Digital Marketing"
+        ? projects.filter((project) => project.category === portfolioFilter)
+        : [];
+  const showProducts = portfolioFilter === "All" || portfolioFilter === "Products";
+  const showTools = portfolioFilter === "All" || portfolioFilter === "Tools";
 
   return (
     <section id="work" className="pb-20 pt-8 md:pb-28 md:pt-12" data-no-text-reveal>
@@ -867,7 +874,7 @@ function WorkSection() {
                   name={project.name}
                   image={project.image}
                   fallbackImage={project.fallbackImage}
-                  video={project.video}
+                  video={availableVideoPaths.includes(project.video ?? "") ? project.video : undefined}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b1120]/80 via-transparent to-transparent" />
                 {project.website && (
@@ -938,6 +945,38 @@ function WorkSection() {
               </div>
             </article>
           ))}
+
+          {showProducts && products.map((product, index) => (
+            <PortfolioDirectoryCard
+              key={`product-${product.name}`}
+              kind="Product"
+              name={product.name}
+              category={product.category}
+              description={product.description}
+              href={product.href}
+              mark={product.mark}
+              coverImage={product.coverImage}
+              video={availableVideoPaths.includes(product.video ?? "") ? product.video : undefined}
+              tags={["Cubixmet Product", product.category]}
+              index={filteredProjects.length + index}
+            />
+          ))}
+
+          {showTools && freeTools.map((tool, index) => (
+            <PortfolioDirectoryCard
+              key={`tool-${tool.id}`}
+              kind="Tool"
+              name={tool.name}
+              category={tool.category}
+              description={tool.description}
+              href={tool.href}
+              mark={tool.mark}
+              coverImage={tool.coverImage}
+              video={availableVideoPaths.includes(tool.video ?? "") ? tool.video : undefined}
+              tags={tool.features.slice(0, 3)}
+              index={filteredProjects.length + (showProducts ? products.length : 0) + index}
+            />
+          ))}
         </div>
       </div>
     </section>
@@ -948,23 +987,29 @@ function MarqueeSection() {
   return (
     <section
       aria-label="Our capabilities"
-      className="relative bg-[#050505] py-5 sm:py-6 md:py-8"
+      className="relative overflow-hidden bg-[#050505] py-5 sm:py-6 md:py-8"
       data-no-text-reveal
     >
-      <div className="mx-auto w-[90%] max-w-[1500px]">
-        <div className="flex flex-wrap items-center gap-x-[0.45em] gap-y-3 text-[clamp(1.65rem,4.6vw,4.4rem)] font-semibold leading-[1.12] tracking-[-0.045em]">
-          {marqueeItems.map((item, index) => (
-            <span
-              key={item}
-              className="inline-flex items-center gap-[0.45em] text-white/65 transition-colors duration-300 hover:text-white"
+      <div className="capabilities-marquee">
+        <div className="capabilities-marquee__track text-[clamp(1.65rem,4.6vw,4.4rem)] font-semibold leading-[1.12] tracking-[-0.045em]">
+          {[0, 1].map((copyIndex) => (
+            <div
+              key={copyIndex}
+              className="capabilities-marquee__group flex shrink-0 items-center gap-[0.5em] pr-[0.5em]"
+              aria-hidden={copyIndex === 1 ? true : undefined}
             >
-              <span>{item}</span>
-              {index < marqueeItems.length - 1 && (
-                <span className="inline-flex shrink-0 text-[#1677FF]/85" aria-hidden="true">
-                  <FlowerSeparator />
+              {marqueeItems.map((item) => (
+                <span
+                  key={item}
+                  className="inline-flex shrink-0 items-center gap-[0.5em] whitespace-nowrap text-white/65 transition-colors duration-300 hover:text-white"
+                >
+                  <span>{item}</span>
+                  <span className="inline-flex shrink-0 text-[#1677FF]/85" aria-hidden="true">
+                    <FlowerSeparator />
+                  </span>
                 </span>
-              )}
-            </span>
+              ))}
+            </div>
           ))}
         </div>
       </div>
@@ -1129,7 +1174,7 @@ function ContactSection() {
   );
 }
 
-export default function HomeSections() {
+export default function HomeSections({ availableVideoPaths }: { availableVideoPaths: string[] }) {
   useReveal();
   return (
     <>
@@ -1139,7 +1184,7 @@ export default function HomeSections() {
       <ProductToolsSection />
       <ServicesSection />
       <ProcessSection />
-      <WorkSection />
+      <WorkSection availableVideoPaths={availableVideoPaths} />
       <TestimonialsSlider />
       <TeamSection />
       <ImpactSection />

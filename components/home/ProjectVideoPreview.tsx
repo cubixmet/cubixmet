@@ -77,7 +77,7 @@ export default function ProjectVideoPreview({
   }, [video, hasPlaybackError]);
 
   // Projects without walkthrough videos retain their existing thumbnails.
-  if (!video) {
+  if (!video || hasPlaybackError) {
     return (
       <Image
         src={hasImageError && fallbackImage ? fallbackImage : image}
@@ -90,24 +90,6 @@ export default function ProjectVideoPreview({
         loading="lazy"
         className="object-cover transition-transform duration-700 group-hover:scale-105"
       />
-    );
-  }
-
-  if (hasPlaybackError) {
-    return (
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#101723] px-5 text-center">
-        <p className="text-[12px] font-medium text-white/85">
-          Video isn&apos;t supported by this browser.
-        </p>
-        <a
-          href={video}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[12px] font-semibold text-[#83bdff] underline underline-offset-4 hover:text-white"
-        >
-          Open original video
-        </a>
-      </div>
     );
   }
 

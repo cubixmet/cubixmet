@@ -7,6 +7,7 @@ type TechTeamPortraitProps = {
   initials: string;
   name: string;
   photoUrl?: string;
+  size?: "default" | "compact";
 };
 
 const flowerPath =
@@ -16,20 +17,27 @@ export default function TechTeamPortrait({
   initials,
   name,
   photoUrl,
+  size = "default",
 }: TechTeamPortraitProps) {
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
   const showPhoto = Boolean(photoUrl && photoUrl !== failedUrl);
 
   return (
-    <div className="relative h-[100px] w-[100px] shrink-0 sm:h-[120px] sm:w-[120px] md:h-[136px] md:w-[136px]">
+    <div
+      className={
+        size === "compact"
+          ? "relative h-12 w-12 shrink-0"
+          : "relative h-[100px] w-[100px] shrink-0 sm:h-[120px] sm:w-[120px] md:h-[136px] md:w-[136px]"
+      }
+    >
       {showPhoto && photoUrl ? (
-        <div className="relative h-full w-full overflow-hidden rounded-[28px] bg-[#101010]">
+        <div className={size === "compact" ? "relative h-full w-full overflow-hidden rounded-[13px] bg-[#101010]" : "relative h-full w-full overflow-hidden rounded-[28px] bg-[#101010]"}>
           <Image
             src={photoUrl}
             alt={name}
             fill
             unoptimized
-            sizes="(max-width: 640px) 100px, 136px"
+            sizes={size === "compact" ? "48px" : "(max-width: 640px) 100px, 136px"}
             className="object-cover"
             onError={() => setFailedUrl(photoUrl)}
           />

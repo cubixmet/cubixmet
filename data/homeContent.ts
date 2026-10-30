@@ -17,9 +17,9 @@ export const homeCopy = {
   whyChooseHeading: "We don't just deliver services —",
   whyChooseSubheading: "we engineer growth ecosystems.",
   portfolioLabel: "Our Portfolio",
-  portfolioHeading: "Selected work across web and digital growth.",
+  portfolioHeading: "Explore our work, products & tools.",
   portfolioDescription:
-    "A selection of projects showcasing our web development and digital marketing capabilities.",
+    "Browse client websites, digital campaigns, Cubixmet software products and practical online tools in one place.",
   testimonialsLabel: "Client stories",
   teamLabel: "Meet the Team",
   teamHeading: "The minds behind",

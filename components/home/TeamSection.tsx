@@ -38,7 +38,7 @@ export default function TeamSection() {
                 className="pointer-events-none absolute -right-16 -top-24 h-64 w-64 rounded-full bg-[#1677FF]/10 blur-[65px] transition-colors duration-500 group-hover:bg-[#1677FF]/20"
               />
               <div className="relative flex min-h-[150px] items-center justify-center border-b border-white/10 pb-5">
-                <TechTeamPortrait initials={leader.initials} name={leader.name} />
+                <TechTeamPortrait initials={leader.initials} name={leader.name} photoUrl={leader.photoUrl} />
               </div>
 
               <div className="relative flex flex-1 flex-col pt-5">
@@ -68,9 +68,12 @@ export default function TeamSection() {
                   key={member.name}
                   className="flex min-h-[108px] min-w-0 items-center gap-4 rounded-[15px] border border-white/10 bg-[#0d111a] p-4 transition-colors hover:border-[#1677FF]/45 sm:p-5"
                 >
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-[13px] border border-[#1677FF]/35 bg-[#1677FF]/10 text-[13px] font-bold text-[#75b5ff]">
-                    {member.initials}
-                  </div>
+                  <TechTeamPortrait
+                    initials={member.initials}
+                    name={member.name}
+                    photoUrl={member.photoUrl}
+                    size="compact"
+                  />
                   <div className="min-w-0">
                     <h4 className="text-[15px] font-semibold leading-[1.2] tracking-[-.03em] text-white sm:text-[17px]">
                       {member.name}
