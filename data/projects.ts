@@ -18,7 +18,7 @@ export const projects: Project[] = [
     id: "blendopia-web",
     website: "https://www.blendopia.com/",
     name: "Blendopia",
-    video: "/video/Dynamic%20Website/blendopia.mp4",
+    video: "/video/DynamicWebsite/blendopia.mp4",
     category: "Dynamic Website",
     description:
       "A modern, brand-focused digital experience built to present Blendopia online.",
@@ -29,7 +29,7 @@ export const projects: Project[] = [
   {
     id: "al-masar-electrical-web",
     website: "https://www.almasarelectrical.com/",
-    video: "/video/Dynamic%20Website/al-masar-electrical.mov",
+    video: "/video/DynamicWebsite/al-masar-electrical.mov",
     name: "Al Masar Electrical",
     category: "Dynamic Website",
     description:
@@ -42,7 +42,7 @@ export const projects: Project[] = [
     id: "zamirzac-erp-web",
     website: "https://demo-erp.zamirzac.com/",
     name: "Zamirzac ERP Demo",
-    video: "/video/Dynamic%20Website/zamirzac-erp.mov",
+    video: "/video/DynamicWebsite/zamirzac-erp.mov",
     category: "Dynamic Website",
     description:
       "Explore the Zamirzac ERP demo environment for business management workflows.",
@@ -53,7 +53,7 @@ export const projects: Project[] = [
   {
     id: "zcards-web",
     website: "https://www.zamirzac.com/",
-    video: "/video/Dynamic%20Website/cardflow.mov",
+    video: "/video/DynamicWebsite/cardflow.mov",
     name: "Zcards",
     category: "Dynamic Website",
     description:
@@ -65,7 +65,7 @@ export const projects: Project[] = [
   {
     id: "alawamer-web",
     website: "https://www.alawamer.com/",
-    video: "/video/Dynamic%20Website/alawamer.mov",
+    video: "/video/DynamicWebsite/alawamer.mov",
     name: "Alawamer",
     category: "Dynamic Website",
     description:
@@ -77,7 +77,7 @@ export const projects: Project[] = [
   {
     id: "infozerv-web",
     website: "https://www.infozerv.com/",
-    video: "/video/Dynamic%20Website/infozerv.mov",
+    video: "/video/DynamicWebsite/infozerv.mov",
     name: "Infozerv",
     category: "Dynamic Website",
     description:
@@ -89,7 +89,7 @@ export const projects: Project[] = [
   {
     id: "almohanna-web",
     website: "https://www.almohannasa.com/",
-    video: "/video/Dynamic%20Website/almohannasa.mov",
+    video: "/video/DynamicWebsite/almohannasa.mov",
     name: "Almohanna SA",
     category: "Dynamic Website",
     description:
@@ -101,7 +101,7 @@ export const projects: Project[] = [
   {
     id: "krispfruit-web",
     website: "https://www.krispfruit.ae/",
-    video: "/video/Dynamic%20Website/krispfruit.mov",
+    video: "/video/DynamicWebsite/krispfruit.mov",
     name: "Krispfruit",
     category: "Dynamic Website",
     description:
@@ -124,7 +124,7 @@ export const projects: Project[] = [
   {
     id: "nest-rehab-web",
     website: "https://www.nestrehabcare.in/",
-    video: "/video/Dynamic%20Website/nestrehabcare.mov",
+    video: "/video/DynamicWebsite/nestrehabcare.mov",
     name: "Nest Rehab Care",
     category: "Dynamic Website",
     description:
@@ -157,7 +157,7 @@ export const projects: Project[] = [
   {
     id: "finecrafts-web",
     website: "https://www.finecraftsgarage.com/",
-    video: "/video/Dynamic%20Website/finecrafts.mov",
+    video: "/video/DynamicWebsite/finecrafts.mov",
     name: "Finecrafts Garage",
     category: "Dynamic Website",
     description:
@@ -169,7 +169,7 @@ export const projects: Project[] = [
   {
     id: "traventurous-web",
     website: "https://www.traventurous.com/",
-    video: "/video/Dynamic%20Website/traventurous.mov",
+    video: "/video/DynamicWebsite/traventurous.mov",
     name: "Traventurous",
     category: "Dynamic Website",
     description:
