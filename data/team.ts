@@ -55,14 +55,7 @@ export const staff: StaffMember[] = [
     description: "Mastermind of impactful product strategy and academy development operations.",
     isLeader: false,
   },
-  {
-    id: "najid",
-    initials: "NA",
-    name: "Najid",
-    role: "Head of Digital Marketing",
-    description: "Brilliant digital marketing lead driving unparalleled brand growth consistently.",
-    isLeader: false,
-  },
+
   {
     id: "amnas-ali",
     initials: "AA",
@@ -84,7 +77,7 @@ export const staff: StaffMember[] = [
 // The order shown on each venture page; each ID resolves to one staff record.
 export const ventureTeamIds: Record<VentureTeamId, readonly string[]> = {
   tech: ["fadhil", "ijas", "amnas-ali", "muhammed-salman"],
-  digital: ["fadhil", "shahid", "najid"],
+  digital: ["fadhil", "shahid"],
   academy: ["fadhil", "ijas", "vafa"],
 };
 
