@@ -920,3 +920,52 @@ a {
     will-change: auto;
   }
 }
+
+/* Team members: one-row, seamless horizontal auto-scroll. */
+.team-marquee-viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.team-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 12px;
+  animation: team-marquee-scroll 30s linear infinite;
+  will-change: transform;
+}
+
+.team-marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.team-marquee-viewport:hover .team-marquee-track,
+.team-marquee-viewport:focus-within .team-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes team-marquee-scroll {
+  to {
+    /* Half the track includes half of its 12px inter-group gap. */
+    transform: translate3d(calc(-50% - 6px), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-marquee-viewport {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .team-marquee-viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .team-marquee-track {
+    animation: none;
+    will-change: auto;
+  }
+}

@@ -62,28 +62,42 @@ export default function TeamSection() {
               {homeCopy.teamMembersLabel}
             </h3>
 
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label={homeCopy.teamMembersLabel}>
-              {teamMembers.map((member) => (
-                <article
-                  key={member.name}
-                  className="flex min-h-[108px] min-w-0 items-center gap-4 rounded-[15px] border border-white/10 bg-[#0d111a] p-4 transition-colors hover:border-[#1677FF]/45 sm:p-5"
-                >
-                  <TechTeamPortrait
-                    initials={member.initials}
-                    name={member.name}
-                    photoUrl={member.photoUrl}
-                    size="compact"
-                  />
-                  <div className="min-w-0">
-                    <h4 className="text-[15px] font-semibold leading-[1.2] tracking-[-.03em] text-white sm:text-[17px]">
-                      {member.name}
-                    </h4>
-                    <p className="mt-1.5 text-[10px] font-medium leading-[1.5] text-white/50 sm:text-[11px]">
-                      {member.role}
-                    </p>
+            <div
+              className="team-marquee-viewport"
+              role="region"
+              aria-label={homeCopy.teamMembersLabel}
+            >
+              <div className="team-marquee-track">
+                {[0, 1].map((copyIndex) => (
+                  <div
+                    key={copyIndex}
+                    className="team-marquee-group"
+                    aria-hidden={copyIndex === 1}
+                  >
+                    {teamMembers.map((member) => (
+                      <article
+                        key={member.name}
+                        className="flex min-h-[108px] w-[270px] shrink-0 items-center gap-4 rounded-[15px] border border-white/10 bg-[#0d111a] p-4 transition-colors hover:border-[#1677FF]/45 sm:w-[300px] sm:p-5"
+                      >
+                        <TechTeamPortrait
+                          initials={member.initials}
+                          name={member.name}
+                          photoUrl={member.photoUrl}
+                          size="compact"
+                        />
+                        <div className="min-w-0">
+                          <h4 className="text-[15px] font-semibold leading-[1.2] tracking-[-.03em] text-white sm:text-[17px]">
+                            {member.name}
+                          </h4>
+                          <p className="mt-1.5 text-[10px] font-medium leading-[1.5] text-white/50 sm:text-[11px]">
+                            {member.role}
+                          </p>
+                        </div>
+                      </article>
+                    ))}
                   </div>
-                </article>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}
