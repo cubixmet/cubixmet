@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Arrow from "./Arrow";
-import ProjectVideoPreview from "./ProjectVideoPreview";
+import ProjectCoverPreview from "./ProjectCoverPreview";
 import Image from "next/image";
 import { services } from "../../data/services";
 import { aboutContent, aboutPillars } from "../../data/about";
@@ -869,11 +869,10 @@ function WorkSection({ availableVideoPaths }: { availableVideoPaths: string[] })
               className="scroll-card group min-w-0 overflow-hidden rounded-[17px] border border-[#192239] bg-[#0b1120] transition-colors hover:border-[#1677FF]/50"
             >
               <div className="relative aspect-[1.75/1] overflow-hidden bg-[#101723] sm:aspect-[2.15/1]">
-                <ProjectVideoPreview
+                <ProjectCoverPreview
                   key={project.id}
                   name={project.name}
-                  image={project.image}
-                  fallbackImage={project.fallbackImage}
+                  category={project.category}
                   video={availableVideoPaths.includes(project.video ?? "") ? project.video : undefined}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b1120]/80 via-transparent to-transparent" />
