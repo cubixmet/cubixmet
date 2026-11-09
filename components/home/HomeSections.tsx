@@ -355,6 +355,9 @@ function ServicesSection() {
   const phoneNavRef = useRef<HTMLDivElement>(null);
   const [activeService, setActiveService] = useState(0);
   const [serviceProgress, setServiceProgress] = useState(0);
+  const [readyServiceImage, setReadyServiceImage] = useState<string | null>(null);
+  const [failedServiceImage, setFailedServiceImage] = useState<string | null>(null);
+  const contentSwipeRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     let frame = 0;
@@ -362,7 +365,8 @@ function ServicesSection() {
     const update = () => {
       frame = 0;
       const section = sectionRef.current;
-      if (!section) return;
+      // Mobile services are controlled by tabs/swipe, not page scroll.
+      if (!section || window.innerWidth < 1024) return;
 
       const top = section.getBoundingClientRect().top + window.scrollY;
       const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
@@ -420,15 +424,16 @@ function ServicesSection() {
   const selectService = (index: number) => {
     const nextIndex = Math.max(0, Math.min(services.length - 1, index));
     setActiveService(nextIndex);
+    setServiceProgress((nextIndex + 1) / services.length);
+    if (window.innerWidth < 1024) return; // Never scroll-jack on phones/tablets.
     const section = sectionRef.current;
     if (!section) return;
     const top = section.getBoundingClientRect().top + window.scrollY;
     const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
     const destination = Math.min(0.999, (nextIndex + 0.08) / services.length);
-
     window.scrollTo({
       top: top + distance * destination,
-      behavior: "smooth",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
   };
 
@@ -463,23 +468,35 @@ function ServicesSection() {
   };
 
   const current = services[activeService];
+  const displayedImage = failedServiceImage === current.image ? services[0].image : current.image;
 
   return (
     <section
       ref={sectionRef}
       id="services"
       aria-label="Our services"
-      className="relative isolate h-[520svh] w-full bg-[#050505] text-white lg:h-[600svh]"
+      className="relative isolate w-full bg-[#050505] text-white lg:h-[600svh]"
       data-no-text-reveal
     >
       {/* Mobile/tablet: pinned scroll-driven services stage, with clickable/swipeable tabs. */}
-      <div className="services-mobile-stage sticky top-0 mx-auto flex h-[100svh] w-full max-w-[660px] flex-col justify-center overflow-hidden px-5 pb-3 pt-[64px] sm:px-8 lg:hidden">
-        <div className="mb-0 flex items-center justify-end gap-4 sm:mb-4">
-          <p className="font-mono text-[11px] text-white/55" aria-live="polite">
-            <span className="font-semibold text-white">{current.no}</span>
-            <span className="mx-2 text-white/35">—</span>
-            {String(services.length).padStart(2, "0")}
-          </p>
+      <div className="services-mobile-stage relative mx-auto flex w-full max-w-[660px] flex-col overflow-visible px-5 pb-12 pt-9 sm:px-8 sm:pb-16 sm:pt-12 lg:hidden">
+        <div className="mb-4 flex items-center justify-between gap-3 sm:mb-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#80b8ff]">Our Services</p>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => selectService(activeService - 1)} disabled={activeService === 0}
+              aria-label="Previous service" className="grid h-10 w-10 place-items-center rounded-full border border-white/20 text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+            </button>
+            <p className="min-w-[62px] text-center font-mono text-[13px] tabular-nums text-white/65" aria-live="polite">
+              <span className="font-semibold text-white">{String(activeService + 1).padStart(2, "0")}</span>
+              <span className="mx-1 text-white/35">/</span>
+              {String(services.length).padStart(2, "0")}
+            </p>
+            <button type="button" onClick={() => selectService(activeService + 1)} disabled={activeService === services.length - 1}
+              aria-label="Next service" className="grid h-10 w-10 place-items-center rounded-full border border-white/20 text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+            </button>
+          </div>
         </div>
 
         {/* Phone: a real horizontally swipeable service carousel with an active slide. */}
@@ -564,17 +581,51 @@ function ServicesSection() {
           />
         </div>
 
-        <div key={current.no} className="service-content-enter">
-          <div className="services-mobile-media relative h-[clamp(130px,27svh,260px)] w-full overflow-hidden rounded-[12px] bg-[#101010]">
-            <img
-              src={current.image}
+        <div
+          key={current.no}
+          className="service-content-enter"
+          role="group"
+          aria-label={`Service ${activeService + 1} of ${services.length}: ${current.title}`}
+          onTouchStart={(event) => {
+            const touch = event.touches[0];
+            if (touch) contentSwipeRef.current = { x: touch.clientX, y: touch.clientY };
+          }}
+          onTouchEnd={(event) => {
+            const start = contentSwipeRef.current;
+            contentSwipeRef.current = null;
+            const touch = event.changedTouches[0];
+            if (!start || !touch) return;
+            const dx = touch.clientX - start.x;
+            const dy = touch.clientY - start.y;
+            if (Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+              selectService(activeService + (dx < 0 ? 1 : -1));
+            }
+          }}
+          onTouchCancel={() => { contentSwipeRef.current = null; }}
+        >
+          <div className="services-mobile-media relative aspect-[16/9] w-full overflow-hidden rounded-[14px] bg-gradient-to-br from-[#173252] via-[#10223b] to-[#080d18]">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center" aria-hidden="true">
+              <span className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#7bbaff]">Cubixmet Services</span>
+              <span className="text-[clamp(1rem,4vw,1.4rem)] font-semibold text-white/80">{current.title}</span>
+            </div>
+            <Image
+              key={displayedImage}
+              src={displayedImage}
               alt={current.title}
-              loading="lazy"
-              decoding="async"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 639px) calc(100vw - 40px), 600px"
+              loading="eager"
+              onLoad={() => setReadyServiceImage(displayedImage)}
+              onError={() => {
+                if (failedServiceImage !== current.image) setFailedServiceImage(current.image);
+              }}
+              className={
+                "object-cover transition-opacity duration-300 " +
+                (readyServiceImage === displayedImage ? "opacity-100" : "opacity-0")
+              }
             />
           </div>
-          <div className="pt-3 sm:pt-4">
+          <div className="pt-4 sm:pt-5">
             <h3 className="text-[clamp(1.3rem,5vw,1.9rem)] font-semibold leading-[1.1] tracking-[-0.045em]">
               {current.title}
             </h3>
@@ -628,7 +679,7 @@ function ServicesSection() {
               />
             </div>
             <p className="mt-4 whitespace-nowrap font-mono text-[12px] font-semibold tabular-nums">
-              {current.no}
+              {String(activeService + 1).padStart(2, "0")}
               <span className="mx-2 text-[#1677FF]">—</span>
               {String(services.length).padStart(2, "0")}
             </p>
