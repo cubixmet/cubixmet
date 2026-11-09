@@ -921,51 +921,64 @@ a {
   }
 }
 
-/* Team members: one-row, seamless horizontal auto-scroll. */
-.team-marquee-viewport {
-  width: 100%;
-  overflow: hidden;
-}
-
-.team-marquee-track {
-  display: flex;
-  width: max-content;
-  gap: 12px;
-  animation: team-marquee-scroll 30s linear infinite;
-  will-change: transform;
-}
-
-.team-marquee-group {
-  display: flex;
-  flex-shrink: 0;
-  gap: 12px;
-}
-
-.team-marquee-viewport:hover .team-marquee-track,
-.team-marquee-viewport:focus-within .team-marquee-track {
-  animation-play-state: paused;
-}
-
-@keyframes team-marquee-scroll {
-  to {
-    /* Half the track includes half of its 12px inter-group gap. */
-    transform: translate3d(calc(-50% - 6px), 0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .team-marquee-viewport {
+/* Cubixmet responsive mobile repair, v2. Keep existing desktop UI unchanged. */
+@media (max-width: 767px) {
+  .portfolio-filter-scroll {
+    display: flex;
+    max-width: 100%;
     overflow-x: auto;
-    scrollbar-width: none;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 16px;
+    scrollbar-width: none;
   }
+  .portfolio-filter-scroll::-webkit-scrollbar { display: none; }
+  .portfolio-filter-scroll > button { flex-shrink: 0; scroll-snap-align: center; }
 
-  .team-marquee-viewport::-webkit-scrollbar {
-    display: none;
+  /* Opt-in horizontal rail for a service/portfolio carousel when detected. */
+  .mobile-swipe-rail {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 16px;
+    scrollbar-width: none;
+    touch-action: pan-x;
+    padding-bottom: 10px;
   }
+  .mobile-swipe-rail::-webkit-scrollbar { display: none; }
+  .mobile-swipe-rail > * {
+    flex: 0 0 min(85vw, 430px);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+  .mobile-swipe-rail img,
+  .mobile-swipe-rail video { max-width: 100%; }
 
-  .team-marquee-track {
-    animation: none;
-    will-change: auto;
+  /* Mobile Safari missed-reveal recovery: avoid invisible content/cards. */
+  .scroll-card.mobile-in-view,
+  [data-scroll-card].mobile-in-view,
+  .reveal.mobile-in-view,
+  [data-reveal].mobile-in-view {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
   }
+  #services img { display: block; max-width: 100%; }
+  #services video { max-width: 100%; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-filter-scroll,
+  .mobile-swipe-rail { scroll-behavior: auto; }
+}
+

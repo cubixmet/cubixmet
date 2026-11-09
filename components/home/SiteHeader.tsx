@@ -85,26 +85,19 @@ export default function SiteHeader() {
     >
       <div className="header-wrapper flex h-[60px] items-center justify-between md:h-[68px]">
         <a
-          href={homeHref("#top")}
-          onClick={() => {
-            setActiveLink("#top");
-            setMenuOpen(false);
-          }}
-          className="relative z-50 inline-flex items-center gap-2.5"
-          aria-label="Cubixmet home"
-        >
-          <span className="grid h-10 w-[120px] place-items-center overflow-hidden md:h-11 md:w-[136px]">
-            <Image
-              src={site.logo}
-              alt={site.brand}
-              width={272}
-              height={88}
-              sizes="(min-width: 768px) 136px, 120px"
-              loading="eager"
-              className="h-full w-full object-contain"
-            />
-          </span>
-        </a>
+        href="/"
+        aria-label="Cubixmet Home"
+        className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white md:h-11 md:w-11"
+>
+  <Image
+    src={site.logo}
+    alt="Cubixmet Logo"
+    width={44}
+    height={44}
+    priority
+    className="h-full w-full object-contain"
+  />
+</a>
 
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 xl:flex 2xl:gap-5">
           {navLinks.map(([href, label]) => (

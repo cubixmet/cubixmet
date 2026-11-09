@@ -1,3 +1,4 @@
+import ArrowUpRightIcon from "./ArrowUpRightIcon";
 import Link from "next/link";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
@@ -27,7 +28,7 @@ export default function ProductToolDetail({ item }: { item: ProductTool }) {
             rel="noopener noreferrer"
             className="mt-9 inline-flex min-h-12 items-center rounded-full bg-[#1677FF] px-6 text-[13px] font-semibold text-white transition-colors hover:bg-[#348aff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]"
           >
-            Discuss a {item.category.toLowerCase()} <span aria-hidden="true" className="ml-3">↗</span>
+            Discuss a {item.category.toLowerCase()} <ArrowUpRightIcon />
           </a>
         </div>
       </section>

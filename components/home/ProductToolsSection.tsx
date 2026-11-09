@@ -1,3 +1,4 @@
+import ArrowUpRightIcon from "./ArrowUpRightIcon";
 import Link from "next/link";
 import { productTools } from "../../data/productTools";
 
@@ -40,7 +41,7 @@ export default function ProductToolsSection() {
                   className="inline-flex min-h-11 items-center gap-3 rounded-full border border-[#1677FF]/60 bg-[#1677FF]/10 px-5 text-[12px] font-semibold text-[#a2cfff] transition-colors hover:bg-[#1677FF] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]"
                 >
                   {item.action}
-                  <span aria-hidden="true">↗</span>
+                  <ArrowUpRightIcon />
                 </Link>
               </div>
             </article>

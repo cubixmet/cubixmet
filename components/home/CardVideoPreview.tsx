@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-/** Display the cover before video playback, when the video is missing or fails. */
+/** Products / Tools: cover first; fade in muted video when playable. */
 export default function CardVideoPreview({
   video,
   image,
@@ -13,16 +13,16 @@ export default function CardVideoPreview({
   image?: string | null;
   name: string;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const ref = useRef<HTMLVideoElement>(null);
   const [failedVideo, setFailedVideo] = useState<string | null>(null);
-  const [loadedVideo, setLoadedVideo] = useState<string | null>(null);
+  const [readyVideo, setReadyVideo] = useState<string | null>(null);
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const showVideo = Boolean(video && video !== failedVideo);
-  const showImage = Boolean(image && image !== failedImage);
+  const cover = image && image !== failedImage ? image : "/images/mobile-media-fallback.svg";
 
   useEffect(() => {
     if (!video || !showVideo) return;
-    const player = videoRef.current;
+    const player = ref.current;
     if (!player) return;
     let visible = false;
     let disposed = false;
@@ -32,18 +32,21 @@ export default function CardVideoPreview({
         return;
       }
       const pending = player.play();
-      if (pending) void pending.catch((error: unknown) => {
-        if (!disposed && error instanceof DOMException && error.name === "NotSupportedError") {
-          setFailedVideo(video);
-        }
-      });
+      if (pending) {
+        void pending.catch((error: unknown) => {
+          if (
+            !disposed && error instanceof DOMException &&
+            (error.name === "NotSupportedError" || error.name === "NotAllowedError")
+          ) setFailedVideo(video);
+        });
+      }
     };
     const observer = new IntersectionObserver(
       ([entry]) => {
-        visible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.45);
+        visible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.4);
         sync();
       },
-      { threshold: [0, 0.45, 0.75] }
+      { threshold: [0, 0.4, 0.75] },
     );
     observer.observe(player);
     document.addEventListener("visibilitychange", sync);
@@ -55,23 +58,21 @@ export default function CardVideoPreview({
     };
   }, [video, showVideo]);
 
-  if (!showVideo && !showImage) return null;
   return (
     <>
-      {showImage && image && (
-        <Image
-          src={image}
-          alt={`${name} cover`}
-          fill
-          unoptimized
-          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-          className="pointer-events-none absolute inset-0 z-10 h-full w-full object-cover"
-          onError={() => setFailedImage(image)}
-        />
-      )}
+      <Image
+        src={cover}
+        alt={`${name} cover`}
+        fill
+        unoptimized={cover.endsWith(".svg")}
+        sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+        className="pointer-events-none absolute inset-0 z-10 h-full w-full object-cover"
+        onError={() => setFailedImage(cover)}
+      />
       {showVideo && video && (
         <video
-          ref={videoRef}
+          key={video}
+          ref={ref}
           src={video}
           playsInline
           muted
@@ -79,10 +80,11 @@ export default function CardVideoPreview({
           preload="none"
           aria-label={`${name} video preview`}
           className={
-            "pointer-events-none absolute inset-0 z-20 h-full w-full object-cover transition-opacity duration-300 " +
-            (loadedVideo === video ? "opacity-100" : "opacity-0")
+            "pointer-events-none absolute inset-0 z-20 h-full w-full object-cover transition-opacity duration-500 " +
+            (readyVideo === video ? "opacity-100" : "opacity-0")
           }
-          onLoadedData={() => setLoadedVideo(video)}
+          onLoadedData={() => setReadyVideo(video)}
+          onPlaying={() => setReadyVideo(video)}
           onError={() => setFailedVideo(video)}
         />
       )}

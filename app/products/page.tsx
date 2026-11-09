@@ -1,3 +1,4 @@
+import ArrowUpRightIcon from "../../components/home/ArrowUpRightIcon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteHeader from "../../components/home/SiteHeader";
@@ -77,7 +78,7 @@ export default function ProductsPage() {
                     className="inline-flex min-h-11 items-center gap-3 rounded-full bg-[#1677FF] px-5 text-[12px] font-semibold text-white transition-colors hover:bg-[#348aff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     aria-label={`Explore ${product.name} (opens in a new tab)`}
                   >
-                    Explore Product <span aria-hidden="true">↗</span>
+                    Explore Product <ArrowUpRightIcon />
                   </a>
                 ) : (
                   <span className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-5 text-[12px] font-semibold text-white/50">

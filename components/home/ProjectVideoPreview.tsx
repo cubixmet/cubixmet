@@ -11,10 +11,9 @@ type ProjectVideoPreviewProps = {
 };
 
 /**
- * Keep a project cover visible until the video has a playable frame.
- * IntersectionObserver starts muted playback only when most of the card is
- * visible, and pauses playback when the visitor scrolls away or switches tabs.
- * Preload "none" avoids downloading large MOV clips before they are visible.
+ * Dynamic Website preview: cover is visible immediately and remains under the
+ * video until a frame is ready. Unsupported/failed video falls back to cover.
+ * Videos only play when substantially in view; Safari uses muted playsInline.
  */
 export default function ProjectVideoPreview({
   name,
@@ -23,35 +22,41 @@ export default function ProjectVideoPreview({
   video,
 }: ProjectVideoPreviewProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasPlaybackError, setHasPlaybackError] = useState(false);
-  const [hasImageError, setHasImageError] = useState(false);
-  const [loadedVideo, setLoadedVideo] = useState<string | null>(null);
+  const [brokenVideo, setBrokenVideo] = useState<string | null>(null);
+  const [readyVideo, setReadyVideo] = useState<string | null>(null);
+  const [brokenImage, setBrokenImage] = useState<string | null>(null);
+
+  const activeVideo = Boolean(video && brokenVideo !== video);
+  const showFrame = activeVideo && readyVideo === video;
+  const currentCover =
+    brokenImage !== image
+      ? image
+      : fallbackImage && fallbackImage !== brokenImage
+        ? fallbackImage
+        : "/images/mobile-media-fallback.svg";
 
   useEffect(() => {
-    if (!video || hasPlaybackError) return;
+    if (!activeVideo || !video) return;
     const player = videoRef.current;
     if (!player) return;
 
-    let visibleRatio = 0;
-    let disposed = false;
-
-    const syncPlayback = () => {
-      if (document.hidden || visibleRatio < 0.55) {
+    let visible = false;
+    let cancelled = false;
+    const sync = () => {
+      if (document.hidden || !visible) {
         player.pause();
         return;
       }
-
-      // Muted inline playback is allowed on current mobile and desktop browsers.
-      // An AbortError is normal if the visitor scrolls away while loading.
-      const playPromise = player.play();
-      if (playPromise) {
-        void playPromise.catch((error: unknown) => {
+      const pending = player.play();
+      if (pending) {
+        void pending.catch((error: unknown) => {
+          // AbortError happens naturally when scrolling out of view.
           if (
-            !disposed &&
+            !cancelled &&
             error instanceof DOMException &&
-            error.name === "NotSupportedError"
+            (error.name === "NotSupportedError" || error.name === "NotAllowedError")
           ) {
-            setHasPlaybackError(true);
+            setBrokenVideo(video);
           }
         });
       }
@@ -59,52 +64,55 @@ export default function ProjectVideoPreview({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry) return;
-        visibleRatio = entry.intersectionRatio;
-        syncPlayback();
+        visible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.4);
+        sync();
       },
-      { threshold: [0, 0.25, 0.55, 0.8] }
+      { threshold: [0, 0.4, 0.75] },
     );
-
     observer.observe(player);
-    document.addEventListener("visibilitychange", syncPlayback);
-
+    document.addEventListener("visibilitychange", sync);
     return () => {
-      disposed = true;
+      cancelled = true;
       observer.disconnect();
-      document.removeEventListener("visibilitychange", syncPlayback);
+      document.removeEventListener("visibilitychange", sync);
       player.pause();
     };
-  }, [video, hasPlaybackError]);
+  }, [video, activeVideo]);
 
   return (
     <>
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[#11253e]"
+        style={{ backgroundImage: "url('/images/mobile-media-fallback.svg')", backgroundSize: "cover", backgroundPosition: "center" }}
+      />
       <Image
-        src={hasImageError && fallbackImage ? fallbackImage : image}
-        alt={`${name} portfolio preview`}
-        onError={() => {
-          if (!hasImageError && fallbackImage) setHasImageError(true);
-        }}
+        src={currentCover}
+        alt={`${name} portfolio cover`}
         fill
         sizes="(max-width: 767px) calc(100vw - 36px), (max-width: 1279px) 50vw, 33vw"
         loading="lazy"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        unoptimized={currentCover.endsWith(".svg")}
+        className="absolute inset-0 h-full w-full object-cover"
+        onError={() => setBrokenImage(currentCover)}
       />
-      {video && !hasPlaybackError && (
+      {activeVideo && video && (
         <video
+          key={video}
           ref={videoRef}
           src={video}
           playsInline
           muted
           loop
           preload="none"
-          aria-label={`${name} project walkthrough, plays automatically when visible`}
+          aria-label={`${name} portfolio video preview`}
           className={
-            "pointer-events-none absolute inset-0 z-10 h-full w-full object-cover transition-opacity duration-500 " +
-            (loadedVideo === video ? "opacity-100" : "opacity-0")
+            "pointer-events-none absolute inset-0 h-full w-full bg-transparent object-cover transition-opacity duration-500 " +
+            (showFrame ? "opacity-100" : "opacity-0")
           }
-          onLoadedData={() => setLoadedVideo(video)}
-          onError={() => setHasPlaybackError(true)}
+          onLoadedData={() => setReadyVideo(video)}
+          onPlaying={() => setReadyVideo(video)}
+          onError={() => setBrokenVideo(video)}
         />
       )}
     </>

@@ -1,3 +1,4 @@
+import ArrowUpRightIcon from "./ArrowUpRightIcon";
 import CardVideoPreview from "./CardVideoPreview";
 
 type PortfolioDirectoryCardProps = {
@@ -102,7 +103,7 @@ export default function PortfolioDirectoryCard({
               className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#1677FF]/45 bg-[#1677FF]/10 px-4 text-[12px] font-semibold text-[#91c5ff] transition-colors hover:bg-[#1677FF] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]"
             >
               {kind === "Tool" ? "Open Tool" : "Explore Product"}
-              <span aria-hidden="true">↗</span>
+              <ArrowUpRightIcon />
             </a>
           ) : (
             <span className="inline-flex min-h-10 items-center rounded-full border border-white/10 px-4 text-[12px] font-medium text-white/40">
