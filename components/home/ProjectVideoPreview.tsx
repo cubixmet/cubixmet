@@ -5,126 +5,105 @@ import { useEffect, useRef, useState } from "react";
 
 type ProjectVideoPreviewProps = {
   name: string;
-  image: string;
-  fallbackImage?: string;
   video?: string;
+  coverImage?: string;
+  fallbackImage?: string;
 };
 
-/* Mobile portfolio video player v3 */
-export default function ProjectVideoPreview({ name, image, fallbackImage, video }: ProjectVideoPreviewProps) {
+/** MP4-first previews. Images are only used for Digital Marketing entries. */
+export default function ProjectVideoPreview({ name, video, coverImage, fallbackImage }: ProjectVideoPreviewProps) {
   const ref = useRef<HTMLVideoElement>(null);
-  const visibleRef = useRef(false);
-  const [brokenVideo, setBrokenVideo] = useState<string | null>(null);
-  const [readyVideo, setReadyVideo] = useState<string | null>(null);
-  const [brokenImage, setBrokenImage] = useState<string | null>(null);
-  const [tapToPlay, setTapToPlay] = useState(false);
-  const videoAvailable = Boolean(video && brokenVideo !== video);
-  const videoReady = Boolean(videoAvailable && readyVideo === video);
-  const cover = brokenImage !== image
-    ? image
-    : fallbackImage && brokenImage !== fallbackImage
-      ? fallbackImage
-      : "/images/mobile-media-fallback.svg";
+  const [unplayable, setUnplayable] = useState<string | null>(null);
+  const [frame, setFrame] = useState<string | null>(null);
+  const [showPlay, setShowPlay] = useState(false);
+  const [failedCovers, setFailedCovers] = useState<string[]>([]);
+  const canPlayVideo = Boolean(video && unplayable !== video);
+  const cover = [coverImage, fallbackImage].find((candidate) => candidate && !failedCovers.includes(candidate));
 
   useEffect(() => {
-    if (!videoAvailable || !video) return;
-    const player = ref.current;
-    if (!player) return;
-    player.muted = true;
-    player.defaultMuted = true;
-    let disposed = false;
-    let startedLoading = false;
-
-    const requestPlayback = () => {
-      if (document.hidden || !visibleRef.current) {
-        player.pause();
-        return;
-      }
-      // play() initiates loading if the near-viewport preload has not fired yet.
-      // Avoid load() immediately before play(), which can cause an AbortError in Safari.
-      const pending = player.play();
-      if (pending) void pending.catch((error: unknown) => {
-        if (disposed || !(error instanceof DOMException)) return;
-        if (error.name === "NotAllowedError") setTapToPlay(true);
-        else if (error.name === "NotSupportedError") setBrokenVideo(video);
+    if (!video || !canPlayVideo) return;
+    const element = ref.current;
+    if (!element) return;
+    let visible = false;
+    let stopped = false;
+    element.muted = true;
+    element.defaultMuted = true;
+    const update = () => {
+      if (stopped) return;
+      if (!visible || document.hidden) { element.pause(); return; }
+      const result = element.play();
+      if (result) void result.catch((error: unknown) => {
+        if (stopped) return;
+        const name = error instanceof DOMException ? error.name : '';
+        if (name === 'NotAllowedError') setShowPlay(true);
+        else if (name === 'NotSupportedError') setUnplayable(video);
       });
     };
-
-    if (typeof IntersectionObserver === "undefined") {
-      visibleRef.current = true;
-      requestPlayback();
-      document.addEventListener("visibilitychange", requestPlayback);
-      return () => { disposed = true; player.pause(); document.removeEventListener("visibilitychange", requestPlayback); };
-    }
-    const nearbyObserver = new IntersectionObserver(([entry]) => {
-      if (!entry?.isIntersecting || startedLoading) return;
-      startedLoading = true;
-      player.load();
-    }, { rootMargin: "500px 0px", threshold: 0 });
-    const playbackObserver = new IntersectionObserver(([entry]) => {
-      visibleRef.current = Boolean(entry?.isIntersecting);
-      requestPlayback();
-    }, { threshold: [0, 0.05, 0.25] });
-    nearbyObserver.observe(player);
-    playbackObserver.observe(player);
-    document.addEventListener("visibilitychange", requestPlayback);
+    const observer = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver(([entry]) => {
+      visible = Boolean(entry?.isIntersecting);
+      update();
+    }, { rootMargin: '250px 0px', threshold: [0, 0.05, 0.2] });
+    if (observer) observer.observe(element);
+    else { visible = true; update(); }
+    document.addEventListener('visibilitychange', update);
     return () => {
-      disposed = true;
-      visibleRef.current = false;
-      nearbyObserver.disconnect();
-      playbackObserver.disconnect();
-      document.removeEventListener("visibilitychange", requestPlayback);
-      player.pause();
+      stopped = true;
+      observer?.disconnect();
+      document.removeEventListener('visibilitychange', update);
+      element.pause();
     };
-  }, [videoAvailable, video]);
+  }, [video, canPlayVideo]);
 
+  const ready = canPlayVideo && frame === video;
   return (
     <>
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[#11253e]"
-        style={{ backgroundImage: "url('/images/mobile-media-fallback.svg')", backgroundSize: "cover", backgroundPosition: "center" }}
-      />
-      <Image
-        src={cover}
-        alt={name + " portfolio cover"}
-        fill
-        sizes="(max-width: 767px) calc(100vw - 36px), (max-width: 1279px) 50vw, 33vw"
-        loading="lazy"
-        unoptimized={cover.endsWith(".svg")}
-        className="absolute inset-0 h-full w-full object-cover"
-        onError={() => setBrokenImage(cover)}
-      />
-      {videoAvailable && video && (
+      <div aria-hidden="true" className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#152b4e] via-[#09182c] to-[#070b15] px-5 text-center">
+        <div>
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.15em] text-[#78b6ff]">{canPlayVideo ? 'Project video' : 'Portfolio preview'}</span>
+          <span className="mt-2 block text-[18px] font-semibold text-white/80">{name}</span>
+        </div>
+      </div>
+      {cover && (
+        <Image
+          src={cover}
+          alt={name + " portfolio image"}
+          fill
+          sizes="(max-width: 767px) calc(100vw - 36px), (max-width: 1279px) 50vw, 33vw"
+          unoptimized={cover.endsWith('.svg')}
+          className="absolute inset-0 h-full w-full object-cover"
+          onError={() => setFailedCovers((old) => old.includes(cover) ? old : [...old, cover])}
+        />
+      )}
+      {canPlayVideo && video && (
         <video
           key={video}
           ref={ref}
           src={video}
+          autoPlay
+          loop
           muted
           playsInline
-          loop
-          preload="none"
-          aria-label={name + " project preview video"}
-          className={"pointer-events-none absolute inset-0 h-full w-full bg-transparent object-cover transition-opacity duration-300 " + (videoReady ? "opacity-100" : "opacity-0")}
-          onLoadedData={() => setReadyVideo(video)}
-          onCanPlay={() => {
-            setReadyVideo(video);
-            if (visibleRef.current && !document.hidden) {
-              void ref.current?.play().catch(() => {});
-            }
-          }}
-          onPlaying={() => { setReadyVideo(video); setTapToPlay(false); }}
-          onError={() => setBrokenVideo(video)}
+          preload="metadata"
+          aria-label={name + " project video"}
+          className={"pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 " + (ready ? 'opacity-100' : 'opacity-0')}
+          onLoadedData={() => setFrame(video)}
+          onPlaying={() => { setFrame(video); setShowPlay(false); }}
+          onError={() => setUnplayable(video)}
         />
       )}
-      {videoAvailable && tapToPlay && (
+      {canPlayVideo && showPlay && (
         <button
           type="button"
-          onClick={() => { const player=ref.current; if(!player)return; player.muted=true; void player.play().then(()=>setTapToPlay(false)).catch(()=>setTapToPlay(true)); }}
-          className="absolute inset-0 z-10 flex items-center justify-center bg-black/35 text-sm font-semibold text-white"
-          aria-label={"Play " + name + " video"}
+          aria-label={"Play " + name + " preview video"}
+          onClick={() => {
+            const player = ref.current;
+            if (!player) return;
+            player.muted = true;
+            void player.play().then(() => { setFrame(video ?? null); setShowPlay(false); }).catch(() => setShowPlay(true));
+          }}
+          className="absolute inset-0 z-10 grid place-items-center bg-black/35 text-white"
         >
-          <span className="rounded-full border border-white/40 bg-black/65 px-5 py-3">Play video ▶</span>
+          <span className="rounded-full border border-white/40 bg-black/70 px-5 py-3 text-sm font-semibold">Play video</span>
         </button>
       )}
     </>

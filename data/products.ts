@@ -15,7 +15,7 @@ export const products: ProductListing[] = [
   {
     name: "CubeGears Drive Hub",
     coverImage: "/images/covers/products/cubegears-drive-hub.svg",
-    video: "/video/Products/cubegears-drive-hub-optimized.mp4",
+    video: "/video/Products/cubegears-drive-hub.mp4",
     mark: "CG",
     category: "Automotive Software",
     description:
@@ -35,7 +35,7 @@ export const products: ProductListing[] = [
   {
     name: "CubeSites",
     coverImage: "/images/covers/products/cubesites.svg",
-    video: "/video/Products/cubesites-optimized.mp4",
+    video: "/video/Products/cubesites.mp4",
     mark: "CS",
     category: "Websites",
     description:
@@ -45,7 +45,7 @@ export const products: ProductListing[] = [
   {
     name: "CubixSkill",
     coverImage: "/images/covers/products/cubixskill.svg",
-    video: "/video/Products/cubixskill-optimized.mp4",
+    video: "/video/Products/cubixskill.mp4",
     mark: "SK",
     category: "Learning Platform",
     description:

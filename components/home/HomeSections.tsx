@@ -8,6 +8,7 @@ import { services } from "../../data/services";
 import { aboutContent, aboutPillars } from "../../data/about";
 import { ventures } from "../../data/ventures";
 import { projects, projectFilters } from "../../data/projects";
+import { projectMarketingCovers } from "../../data/projectMarketingCovers";
 import { products } from "../../data/products";
 import { freeTools } from "../../data/freeTools";
 import PortfolioDirectoryCard from "./PortfolioDirectoryCard";
@@ -924,8 +925,8 @@ function WorkSection({ availableVideoPaths }: { availableVideoPaths: string[] })
                 <ProjectVideoPreview
                   key={project.id}
                   name={project.name}
-                  image={project.image}
-                  fallbackImage={project.fallbackImage}
+                  coverImage={projectMarketingCovers[project.id]?.image}
+                  fallbackImage={projectMarketingCovers[project.id]?.fallbackImage}
                   video={availableVideoPaths.includes(project.video ?? "") ? project.video : undefined}
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b1120]/80 via-transparent to-transparent" />

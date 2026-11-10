@@ -56,18 +56,15 @@ export default function SiteFooter() {
             <a
               href="/"
               aria-label="Cubixmet home"
-              className="inline-flex items-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1677FF]"
+              className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1677FF] md:h-11 md:w-11"
             >
-              <span className="grid h-10 w-[120px] place-items-center overflow-hidden md:h-11 md:w-[136px]">
-                <Image
-                  src={site.logo}
-                  alt={site.brand}
-                  width={272}
-                  height={88}
-                  sizes="(min-width: 768px) 136px, 120px"
-                  className="h-full w-full object-contain"
-                />
-              </span>
+              <Image
+                src={site.logo}
+                alt={site.brand}
+                width={44}
+                height={44}
+                className="h-full w-full object-contain"
+              />
             </a>
 
             <h2 className="mt-7 max-w-[760px] text-[clamp(2.4rem,5vw,5.6rem)] font-medium leading-[.93] tracking-[-0.06em]">
