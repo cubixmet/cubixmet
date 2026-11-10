@@ -989,29 +989,47 @@ a {
 
 
 
-/* Cubixmet Mobile Services — viewport-safe and swipeable */
+/* Pinned, scroll-driven mobile Services showcase (not a body scroll lock). */
 @media (max-width: 1023px) {
-  #services { height: auto; min-height: 0; }
-  .services-mobile-stage {
-    position: relative;
-    top: auto;
-    height: auto;
+  #services { height: 700svh; }
+  #services .services-mobile-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
     min-height: 0;
+    overflow: hidden;
     justify-content: flex-start;
-    overflow: visible;
+    padding-top: clamp(68px, 9svh, 85px);
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
   }
-  .services-mobile-media {
-    width: 100%;
-    height: auto !important;
-    aspect-ratio: 16 / 9;
+  #services .services-mobile-media {
+    height: clamp(220px, 36svh, 330px) !important;
+    aspect-ratio: auto;
     max-height: none;
   }
-  .services-mobile-stage .service-content-enter { touch-action: pan-y pinch-zoom; }
-  .services-phone-track {
-    scroll-behavior: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
+  #services .services-mobile-stage .service-content-enter {
+    touch-action: pan-y pinch-zoom;
   }
+  #services .services-mobile-stage .service-content-enter h3 {
+    font-size: clamp(1.18rem, 4.5vw, 1.65rem);
+    line-height: 1.1;
+  }
+  #services .services-mobile-stage .service-content-enter p {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+  #services .services-mobile-features { margin-top: 8px; row-gap: 4px; }
+  #services .services-mobile-features li { font-size: 10px; line-height: 1.35; }
+  #services .services-phone-track { overscroll-behavior-x: contain; scroll-snap-type: x proximity; }
+}
+@media (max-width: 1023px) and (max-height: 690px) {
+  #services .services-mobile-stage { padding-top: 60px; padding-bottom: 6px; }
+  #services .services-mobile-media { height: clamp(160px, 30svh, 220px) !important; }
+  #services .services-phone-slide { font-size: 12px; }
+  #services .services-mobile-stage .service-content-enter h3 { font-size: 1.12rem; }
+  #services .services-mobile-stage .service-content-enter p { font-size: 10px; }
+  #services .services-mobile-features li { font-size: 9px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .service-content-enter { animation: none !important; opacity: 1 !important; transform: none !important; }

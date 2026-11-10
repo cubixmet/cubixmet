@@ -346,6 +346,7 @@ function VenturesSection() {
   );
 }
 
+/* Mobile pinned services v3 */
 function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const mobileNavRef = useRef<HTMLDivElement>(null);
@@ -365,8 +366,8 @@ function ServicesSection() {
     const update = () => {
       frame = 0;
       const section = sectionRef.current;
-      // Mobile services are controlled by tabs/swipe, not page scroll.
-      if (!section || window.innerWidth < 1024) return;
+      // Both desktop and mobile use a native sticky scroll-driven timeline.
+      if (!section) return;
 
       const top = section.getBoundingClientRect().top + window.scrollY;
       const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
@@ -425,7 +426,7 @@ function ServicesSection() {
     const nextIndex = Math.max(0, Math.min(services.length - 1, index));
     setActiveService(nextIndex);
     setServiceProgress((nextIndex + 1) / services.length);
-    if (window.innerWidth < 1024) return; // Never scroll-jack on phones/tablets.
+    // Tabs, arrow buttons and horizontal swipes navigate along this same scroll timeline.
     const section = sectionRef.current;
     if (!section) return;
     const top = section.getBoundingClientRect().top + window.scrollY;
@@ -475,11 +476,11 @@ function ServicesSection() {
       ref={sectionRef}
       id="services"
       aria-label="Our services"
-      className="relative isolate w-full bg-[#050505] text-white lg:h-[600svh]"
+      className="relative isolate h-[700svh] w-full bg-[#050505] text-white lg:h-[600svh]"
       data-no-text-reveal
     >
       {/* Mobile/tablet: pinned scroll-driven services stage, with clickable/swipeable tabs. */}
-      <div className="services-mobile-stage relative mx-auto flex w-full max-w-[660px] flex-col overflow-visible px-5 pb-12 pt-9 sm:px-8 sm:pb-16 sm:pt-12 lg:hidden">
+      <div className="services-mobile-stage sticky top-0 mx-auto flex h-[100svh] w-full max-w-[660px] flex-col justify-start overflow-hidden px-5 pb-3 pt-[76px] sm:px-8 lg:hidden">
         <div className="mb-4 flex items-center justify-between gap-3 sm:mb-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#80b8ff]">Our Services</p>
           <div className="flex items-center gap-2">
@@ -603,7 +604,7 @@ function ServicesSection() {
           }}
           onTouchCancel={() => { contentSwipeRef.current = null; }}
         >
-          <div className="services-mobile-media relative aspect-[16/9] w-full overflow-hidden rounded-[14px] bg-gradient-to-br from-[#173252] via-[#10223b] to-[#080d18]">
+          <div className="services-mobile-media relative h-[clamp(220px,36svh,330px)] w-full shrink-0 overflow-hidden rounded-[14px] bg-gradient-to-br from-[#173252] via-[#10223b] to-[#080d18]">
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center" aria-hidden="true">
               <span className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#7bbaff]">Cubixmet Services</span>
               <span className="text-[clamp(1rem,4vw,1.4rem)] font-semibold text-white/80">{current.title}</span>
@@ -625,14 +626,14 @@ function ServicesSection() {
               }
             />
           </div>
-          <div className="pt-4 sm:pt-5">
-            <h3 className="text-[clamp(1.3rem,5vw,1.9rem)] font-semibold leading-[1.1] tracking-[-0.045em]">
+          <div className="pt-2.5 sm:pt-4">
+            <h3 className="text-[clamp(1.18rem,4.5vw,1.65rem)] font-semibold leading-[1.1] tracking-[-0.045em]">
               {current.title}
             </h3>
-            <p className="mt-2 text-[12px] leading-[1.55] text-white/65 sm:text-[14px] sm:leading-6">{current.copy}</p>
-            <ul className="services-mobile-features mt-3 grid min-w-0 grid-cols-2 gap-x-3 gap-y-1.5 pb-1">
+            <p className="mt-1.5 text-[11px] leading-[1.45] text-white/65 sm:text-[13px] sm:leading-5">{current.copy}</p>
+            <ul className="services-mobile-features mt-2 grid min-w-0 grid-cols-2 gap-x-3 gap-y-1 pb-1">
               {current.meta.map((item) => (
-                <li key={item} className="flex min-w-0 items-start gap-2 text-[11px] leading-[1.45] text-white/65 sm:text-[12px]">
+                <li key={item} className="flex min-w-0 items-start gap-2 text-[10px] leading-[1.35] text-white/65 sm:text-[12px]">
                   <span aria-hidden="true" className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1677FF]" />
                   <span className="min-w-0 break-words">{item}</span>
                 </li>

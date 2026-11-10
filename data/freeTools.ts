@@ -19,7 +19,7 @@ export const freeTools: FreeTool[] = [
   {
     id: "qr-barcode",
     coverImage: "/images/covers/tools/qr-barcode.svg",
-    video: "/video/Tools/qr-barcode.mp4",
+    video: "/video/Tools/qr-barcode-optimized.mp4",
     name: "Free QR & Barcode Generator",
     category: "Business & Marketing",
     description:
@@ -39,7 +39,7 @@ export const freeTools: FreeTool[] = [
   {
     id: "ticket-certificate",
     coverImage: "/images/covers/tools/ticket-certificate.svg",
-    video: "/video/Tools/ticket-certificate.mp4",
+    video: "/video/Tools/ticket-certificate-optimized-18s.mp4",
     name: "Free Ticket & Certificate Generator",
     category: "Events & Documents",
     description:
@@ -59,7 +59,7 @@ export const freeTools: FreeTool[] = [
   {
     id: "cubecutter",
     coverImage: "/images/covers/tools/cubecutter.svg",
-    video: "/video/Tools/cubecutter.mp4",
+    video: "/video/Tools/cubecutter-optimized.mp4",
     name: "CubeCutter",
     category: "Design & Social Media",
     description:
@@ -79,7 +79,7 @@ export const freeTools: FreeTool[] = [
   {
     id: "vcf-generator",
     coverImage: "/images/covers/tools/vcf-generator.svg",
-    video: "/video/Tools/vcf-generator.mp4",
+    video: "/video/Tools/vcf-generator-optimized.mp4",
     name: "VCF Generator Pro",
     category: "Contacts & Productivity",
     description:
@@ -99,7 +99,7 @@ export const freeTools: FreeTool[] = [
   {
     id: "nutri-pro",
     coverImage: "/images/covers/tools/nutri-pro.svg",
-    video: "/video/Tools/nutri-pro.mp4",
+    video: "/video/Tools/nutri-pro-optimized.mp4",
     name: "Nutri Pro",
     category: "Nutrition & Wellness",
     description:
@@ -119,7 +119,7 @@ export const freeTools: FreeTool[] = [
   {
     id: "cenora-op",
     coverImage: "/images/covers/tools/cenora-op.svg",
-    video: "/video/Tools/cenora-op.mp4",
+    video: "/video/Tools/cenora-op-optimized.mp4",
     name: "Cenora OP Poster Creator",
     category: "Healthcare Operations",
     description:
