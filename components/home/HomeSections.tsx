@@ -483,20 +483,20 @@ function ServicesSection() {
       {/* Mobile/tablet: pinned scroll-driven services stage, with clickable/swipeable tabs. */}
       <div className="services-mobile-stage sticky top-0 mx-auto flex h-[100svh] w-full max-w-[660px] flex-col justify-start overflow-hidden px-5 pb-3 pt-[76px] sm:px-8 lg:hidden">
         <div className="mb-4 flex items-center justify-between gap-3 sm:mb-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#80b8ff]">Our Services</p>
+          <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[#80b8ff]">Our Services</p>
           <div className="flex items-center gap-2">
             <button type="button" onClick={() => selectService(activeService - 1)} disabled={activeService === 0}
-              aria-label="Previous service" className="grid h-10 w-10 place-items-center rounded-full border border-white/20 text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]">
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+              aria-label="Previous service" className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/20 text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
             </button>
-            <p className="min-w-[62px] text-center font-mono text-[13px] tabular-nums text-white/65" aria-live="polite">
+            <p className="min-w-[64px] text-center font-mono text-[14px] tabular-nums text-white/65" aria-live="polite">
               <span className="font-semibold text-white">{String(activeService + 1).padStart(2, "0")}</span>
               <span className="mx-1 text-white/35">/</span>
               {String(services.length).padStart(2, "0")}
             </p>
             <button type="button" onClick={() => selectService(activeService + 1)} disabled={activeService === services.length - 1}
-              aria-label="Next service" className="grid h-10 w-10 place-items-center rounded-full border border-white/20 text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]">
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+              aria-label="Next service" className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/20 text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF]">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
             </button>
           </div>
         </div>
@@ -530,7 +530,7 @@ function ServicesSection() {
                 aria-current={activeService === index ? "true" : undefined}
                 aria-label={`Service ${index + 1} of ${services.length}: ${service.title}`}
                 className={
-                  "services-phone-slide flex min-h-11 shrink-0 snap-start items-center justify-center border px-3 py-2 text-center text-[14px] font-extrabold leading-[1.2] tracking-[-.02em] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF] " +
+                  "services-phone-slide flex min-h-11 shrink-0 snap-start items-center justify-center border px-3 py-2 text-center text-[15px] font-semibold leading-[1.2] tracking-[-.02em] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF] " +
                   (activeService === index
                     ? "border-white bg-white text-black"
                     : "border-white/15 bg-[#131923] text-white/80")
@@ -628,13 +628,13 @@ function ServicesSection() {
             />
           </div>
           <div className="pt-2.5 sm:pt-4">
-            <h3 className="text-[clamp(1.18rem,4.5vw,1.65rem)] font-semibold leading-[1.1] tracking-[-0.045em]">
+            <h3 className="text-[clamp(1.4rem,5vw,1.9rem)] font-semibold leading-[1.1] tracking-[-0.045em]">
               {current.title}
             </h3>
-            <p className="mt-1.5 text-[11px] leading-[1.45] text-white/65 sm:text-[13px] sm:leading-5">{current.copy}</p>
+            <p className="mt-1.5 text-[13px] leading-[1.5] text-white/70 sm:text-[14px] sm:leading-5">{current.copy}</p>
             <ul className="services-mobile-features mt-2 grid min-w-0 grid-cols-2 gap-x-3 gap-y-1 pb-1">
               {current.meta.map((item) => (
-                <li key={item} className="flex min-w-0 items-start gap-2 text-[10px] leading-[1.35] text-white/65 sm:text-[12px]">
+                <li key={item} className="flex min-w-0 items-start gap-2 text-[11px] leading-[1.45] text-white/70 sm:text-[12px]">
                   <span aria-hidden="true" className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1677FF]" />
                   <span className="min-w-0 break-words">{item}</span>
                 </li>

@@ -28,6 +28,7 @@ export default function ProjectVideoPreview({ name, video, coverImage, fallbackI
     let stopped = false;
     element.muted = true;
     element.defaultMuted = true;
+    element.setAttribute("playsinline", "");
     const update = () => {
       if (stopped) return;
       if (!visible || document.hidden) { element.pause(); return; }
@@ -101,9 +102,9 @@ export default function ProjectVideoPreview({ name, video, coverImage, fallbackI
             player.muted = true;
             void player.play().then(() => { setFrame(video ?? null); setShowPlay(false); }).catch(() => setShowPlay(true));
           }}
-          className="absolute inset-0 z-10 grid place-items-center bg-black/35 text-white"
+          className="absolute bottom-3 left-3 z-20 inline-flex min-h-11 items-center justify-center rounded-full border border-white/35 bg-[#101827]/90 px-4 py-2 text-white shadow-lg backdrop-blur-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1677FF] sm:bottom-4 sm:left-4"
         >
-          <span className="rounded-full border border-white/40 bg-black/70 px-5 py-3 text-sm font-semibold">Play video</span>
+          <span className="inline-flex items-center gap-2 text-[12px] font-semibold"><svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4"><path d="m8 5 11 7-11 7V5Z" /></svg>Play video</span>
         </button>
       )}
     </>
